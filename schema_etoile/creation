@@ -1,0 +1,47 @@
+-- Création de la dimension des fournisseurs
+CREATE TABLE Dim_Vendors (
+    VendorID INTEGER PRIMARY KEY
+);
+
+-- Création de la dimension des types de tarifs
+CREATE TABLE Dim_RateCodes (
+    RatecodeID INTEGER PRIMARY KEY
+);
+
+-- Création de la dimension des lieux
+CREATE TABLE Dim_Locations (
+    LocationID INTEGER PRIMARY KEY
+);
+
+-- Création de la dimension des types de paiement
+CREATE TABLE Dim_PaymentTypes (
+    PaymentTypeID INTEGER PRIMARY KEY
+);
+
+-- Création de la table des faits avec les clés étrangères
+CREATE TABLE Fact_Trajet (
+    tpep_pickup_datetime TIMESTAMP WITHOUT TIME ZONE,
+    tpep_dropoff_datetime TIMESTAMP WITHOUT TIME ZONE,
+    passenger_count INTEGER,
+    trip_distance DOUBLE PRECISION,
+    fare_amount DOUBLE PRECISION,
+    extra DOUBLE PRECISION,
+    mta_tax DOUBLE PRECISION,
+    tip_amount DOUBLE PRECISION,
+    tolls_amount DOUBLE PRECISION,
+    improvement_surcharge DOUBLE PRECISION,
+    total_amount DOUBLE PRECISION,
+    congestion_surcharge DOUBLE PRECISION,
+    airport_fee DOUBLE PRECISION,
+    VendorID INTEGER,
+    RatecodeID INTEGER,
+    PULocationID INTEGER,
+    DOLocationID INTEGER,
+    PaymentTypeID INTEGER,
+    -- Définition des clés étrangères
+    CONSTRAINT fk_vendor FOREIGN KEY (VendorID) REFERENCES Dim_Vendors(VendorID),
+    CONSTRAINT fk_ratecode FOREIGN KEY (RatecodeID) REFERENCES Dim_RateCodes(RatecodeID),
+    CONSTRAINT fk_pulocation FOREIGN KEY (PULocationID) REFERENCES Dim_Locations(LocationID),
+    CONSTRAINT fk_dolocation FOREIGN KEY (DOLocationID) REFERENCES Dim_Locations(LocationID),
+    CONSTRAINT fk_payment_type FOREIGN KEY (PaymentTypeID) REFERENCES Dim_PaymentTypes(PaymentTypeID)
+);

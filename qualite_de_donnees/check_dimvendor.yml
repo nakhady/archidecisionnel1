@@ -1,0 +1,10 @@
+checks for dim_vendors:
+  - schema:
+      warn:
+        when required column missing:
+          - vendorid
+      fail:
+        when forbidden column present:
+          - column_name1
+  - invalid_count(vendorid) = 0:
+      valid values: [1, 2]

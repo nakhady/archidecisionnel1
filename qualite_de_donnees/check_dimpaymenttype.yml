@@ -1,0 +1,9 @@
+checks for dim_paymenttypes:
+  - schema:
+      warn:
+        when required column missing:
+          - paymenttypeid
+        when forbidden column present:
+          - column_name1  
+  - invalid_count(paymenttypeid) = 0:
+      valid values: [1, 2, 3, 4, 5, 6]

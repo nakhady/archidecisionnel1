@@ -1,0 +1,10 @@
+checks for dim_ratecodes:
+  - schema:
+      warn:
+        when required column missing:
+          - ratecodes
+      fail:
+        when forbidden column present:
+          - column_name1
+  - invalid_count(dim_ratecodes) = 0:
+      valid values: [1, 2, 3, 4, 5, 6]

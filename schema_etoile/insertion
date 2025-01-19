@@ -1,0 +1,75 @@
+-- Insertion dans Dim_Vendors
+INSERT INTO Dim_Vendors (vendorid)
+SELECT DISTINCT "VendorID"
+FROM "nyc_raw";
+
+INSERT INTO Dim_RateCodes (RatecodeID)
+SELECT DISTINCT COALESCE("RatecodeID", 0)  -- Remplacer les NULL par 0
+FROM "nyc_raw";
+
+INSERT INTO Dim_Locations (locationID)
+SELECT DISTINCT COALESCE("PULocationID", 0)  -- Remplacer les NULL par 0
+FROM "nyc_raw";
+
+-- Insertion des PULocationID et DOLocationID distincts dans Dim_Locations, en remplaçant les NULL par 0
+INSERT INTO Dim_Locations (LocationID)
+SELECT DISTINCT COALESCE("PULocationID", 0)  -- Remplacer les NULL par 0
+FROM "nyc_raw"
+WHERE "PULocationID" IS NOT NULL
+
+UNION
+
+SELECT DISTINCT COALESCE("DOLocationID", 0)  -- Remplacer les NULL par 0
+FROM "nyc_raw"
+WHERE "DOLocationID" IS NOT NULL;
+
+-- Insertion des payment_type distincts dans Dim_PaymentTypes, en remplaçant les NULL par 0
+INSERT INTO Dim_PaymentTypes (PaymentTypeID)
+SELECT DISTINCT COALESCE("payment_type", 0)  -- Remplacer les NULL par 0
+FROM "nyc_raw";
+
+
+-- Insertion dans Fact_Trajet en remplaçant les NULL pour les dimensions par 0
+INSERT INTO Fact_Trajet (
+    tpep_pickup_datetime,
+    tpep_dropoff_datetime,
+    passenger_count,
+    trip_distance,
+    fare_amount,
+    extra,
+    mta_tax,
+    tip_amount,
+    tolls_amount,
+    improvement_surcharge,
+    total_amount,
+    congestion_surcharge,
+    airport_fee,
+    VendorID,
+    RatecodeID,
+    PULocationID,
+    DOLocationID,
+    PaymentTypeID
+--    date_key
+)
+SELECT 
+    "tpep_pickup_datetime",
+    "tpep_dropoff_datetime",
+    "passenger_count",
+    "trip_distance",
+    "fare_amount",
+    "extra",
+    "mta_tax",
+    "tip_amount",
+    "tolls_amount",
+    "improvement_surcharge",
+    "total_amount",
+    "congestion_surcharge",
+    "Airport_fee",
+    -- Récupérer les clés étrangères des tables de dimension avec gestion des NULL
+    COALESCE("VendorID", 0) AS "VendorID",  -- Remplacer NULL par 0
+    COALESCE("RatecodeID", 0) AS "RatecodeID",  -- Remplacer NULL par 0
+    COALESCE("PULocationID", 0) AS "PULocationID",  -- Remplacer NULL par 0
+    COALESCE("DOLocationID", 0) AS "DOLocationID",  -- Remplacer NULL par 0
+    COALESCE("payment_type", 0) AS "PaymentTypeID"  -- Remplacer NULL par 0
+ --   COALESCE(date_key, 0) AS date_key  -- Remplacer NULL par 0 pour date_key
+FROM "nyc_raw";

@@ -1,0 +1,11 @@
+checks for dim_locations:
+  - schema:
+      warn:
+        when required column missing:
+          - locationid
+      fail:
+        when forbidden column present:
+          - column_name1
+  - invalid_count(PULocationID) = 0:
+      valid min: 1
+      valid max: 265

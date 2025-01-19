@@ -1,0 +1,24 @@
+checks for nyc_raw:
+  - invalid_count(VendorID) = 0:
+      valid values: [1, 2]
+
+  - invalid_count(RatecodeID) = 0:
+      valid values: [1, 2, 3, 4, 5, 6]
+
+  - invalid_count(payment_type) = 0:
+      valid values: [1, 2, 3, 4, 5, 6]
+
+  - invalid_count(PULocationID) = 0:
+      valid min: 1
+      valid max: 265
+
+  - invalid_count(DOLocationID) = 0:
+      valid min: 1
+      valid max: 265
+
+
+
+
+
+
+
